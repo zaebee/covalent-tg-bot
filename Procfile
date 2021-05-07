@@ -1,1 +1,1 @@
-backend: bin/covalent-tg-bot
+worker: bin/covalent-tg-bot
