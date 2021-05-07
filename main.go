@@ -53,6 +53,5 @@ func main() {
 		}
 		b.Send(m.Sender, message)
 	})
-
 	b.Start()
 }
