@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/big"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -11,6 +13,17 @@ import (
 	"github.com/zaebee/govalent/class_a"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
+
+func convertBalance(decimals int64, balance string) (*big.Float, error) {
+	dec := new(big.Int).Exp(big.NewInt(10), big.NewInt(decimals), nil)
+	div := new(big.Float).SetInt(dec)
+
+	balanceFloat, err := strconv.ParseFloat(balance, 10)
+	if err != nil {
+		return nil, err
+	}
+	return new(big.Float).Quo(big.NewFloat(balanceFloat), div), nil
+}
 
 func main() {
 	token := os.Getenv("TOKEN")
@@ -45,7 +58,11 @@ func main() {
 				message = fmt.Sprintf("Sorry, I can't get balance for given address: %v", err)
 			}
 			for _, i := range info.Items {
-				balance := fmt.Sprintf("%v - %v %v", i.ContractName, i.Balance, i.ContractTickerSymbol)
+				balanceFloat, err := convertBalance(int64(i.ContractDecimals), i.Balance)
+				if err != nil {
+					log.Printf("unable convert balance %v: %v", i.Balance, err)
+				}
+				balance := fmt.Sprintf("%v - %f %v", i.ContractName, balanceFloat, i.ContractTickerSymbol)
 				balances = append(balances, balance)
 			}
 			message = strings.Join(balances, "\n")
