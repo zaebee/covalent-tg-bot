@@ -1,1 +1,1 @@
-web: bin/covalent-tg-bot
+backend: bin/covalent-tg-bot
