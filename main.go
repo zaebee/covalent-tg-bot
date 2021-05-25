@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zaebee/govalent"
-	"github.com/zaebee/govalent/class_a"
+	"github.com/AlchemistsLab/govalent"
+	"github.com/AlchemistsLab/govalent/class_a"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
